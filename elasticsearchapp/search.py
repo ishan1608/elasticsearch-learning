@@ -4,8 +4,6 @@ from elasticsearch_dsl.connections import connections
 
 from . import models
 
-print 'hello'
-
 es = connections.create_connection(
     hosts=['localhost'],
     http_auth=('elastic', 'changeme'),
