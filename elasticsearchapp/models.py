@@ -30,3 +30,10 @@ class BlogPost(models.Model):
         )
         obj.save()
         return obj.to_dict(include_meta=True)
+
+    @classmethod
+    def post_save(cls, sender, instance, **kwargs):
+        instance.indexing()
+
+
+models.signals.post_save.connect(BlogPost.post_save, sender=BlogPost)
