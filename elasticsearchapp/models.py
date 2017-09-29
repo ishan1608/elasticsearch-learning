@@ -15,3 +15,18 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return 'Blog: {}'.format(self.title).encode('utf-8')
+
+    def indexing(self):
+        from .search import BlogPostIndex
+
+        obj = BlogPostIndex(
+            meta={
+                'id': self.id
+            },
+            author=self.author.username,
+            posted_date=self.posted_date,
+            title=self.title,
+            text=self.text
+        )
+        obj.save()
+        return obj.to_dict(include_meta=True)
