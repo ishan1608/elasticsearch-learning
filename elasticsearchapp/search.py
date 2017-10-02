@@ -35,7 +35,8 @@ def _print_results(result):
 
 def _search_blog(subdomain, search_term):
     blog = Blog.objects.get(subdomain=subdomain)
-    s = Search().query('match', blog=blog.subdomain).filter('term', text=search_term)
+    index_name = 'blogpost-index-{}'.format(blog.subdomain)
+    s = Search(index=index_name).filter('term', text=search_term)
     return s.execute()
 
 
