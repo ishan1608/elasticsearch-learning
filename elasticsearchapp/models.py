@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils import timezone
 
@@ -21,6 +22,7 @@ class BlogPost(models.Model):
     posted_date = models.DateField(default=timezone.now)
     title = models.CharField(max_length=200)
     text = models.TextField(max_length=1000)
+    metadata = JSONField(default=dict)
 
     def __str__(self):
         return 'Post: {}'.format(self.title).encode('utf-8')
