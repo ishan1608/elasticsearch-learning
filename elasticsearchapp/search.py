@@ -1,5 +1,5 @@
 from elasticsearch.helpers import bulk
-from elasticsearch_dsl import DocType, Text, Date, Search
+from elasticsearch_dsl import DocType, Text, Date, Search, Object
 from elasticsearch_dsl.connections import connections
 
 from . import models
@@ -17,6 +17,7 @@ class BlogPostIndex(DocType):
     title = Text()
     text = Text()
     blog = Text()
+    metadata = Object()
 
     class Meta:
         index = 'blogpost-index'

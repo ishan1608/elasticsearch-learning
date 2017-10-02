@@ -39,6 +39,7 @@ class BlogPost(models.Model):
             title=self.title,
             text=self.text,
             blog=self.blog.subdomain,
+            metadata=self.metadata,
         )
         obj.save()
         return obj.to_dict(include_meta=True)
