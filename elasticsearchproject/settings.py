@@ -38,7 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'elasticsearchapp.apps.ElasticsearchappConfig'
+    # Our Apps
+    'elasticsearchapp.apps.ElasticsearchappConfig',
+
+    # Utilities
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
