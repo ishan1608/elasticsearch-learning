@@ -19,13 +19,17 @@ class BlogPostIndex(DocType):
     blog = Text()
     metadata = Object()
 
-    class Meta:
-        index = 'blogpost-index'
-
 
 def bulk_indexing():
-    BlogPostIndex.init()
-    bulk(client=es, actions=(b.indexing() for b in BlogPost.objects.all().iterator()))
+    for blog in Blog.objects.all():
+        index_name = 'blogpost-index-{}'.format(blog.subdomain)
+        # Create Index and map BlogPostIndex to it
+        BlogPostIndex.init(index=index_name, using=es)
+        # Index Posts
+        # NOTE Need to provide index name while bulk indexing
+        bulk(client=es, actions=(
+            post.indexing() for post in BlogPost.objects.filter(blog=blog).iterator()
+        ))
 
 
 def _print_results(result):
