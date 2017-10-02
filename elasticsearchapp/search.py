@@ -25,7 +25,7 @@ class BlogPostIndex(DocType):
 
 def bulk_indexing():
     BlogPostIndex.init()
-    bulk(client=es, actions=(b.indexing() for b in BlogPost.objects.all().iterator()))
+    bulk(client=es, actions=[b.indexing() for b in BlogPost.objects.all().iterator()])
 
 
 def _print_results(result):
