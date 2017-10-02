@@ -32,16 +32,21 @@ def _print_results(result):
         print hit.blog, hit.title
 
 
+def _search(search_client, search_term):
+    search_client = search_client.query('match', text=search_term)
+    return search_client.execute()
+
+
 def _search_blog(subdomain, search_term):
     blog = Blog.objects.get(subdomain=subdomain)
     index_name = 'blogpost-index-{}'.format(blog.subdomain)
-    s = Search(index=index_name).filter('term', text=search_term)
-    return s.execute()
+    s = Search(index=index_name)
+    return _search(s, search_term)
 
 
 def search(text):
-    s = Search().filter('term', text=text)
-    result = s.execute()
+    s = Search()
+    result = _search(s, text)
     _print_results(result)
     return result
 
