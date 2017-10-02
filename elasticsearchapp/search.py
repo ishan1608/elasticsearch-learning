@@ -27,9 +27,9 @@ def bulk_indexing():
         BlogPostIndex.init(index=index_name, using=es)
         # Index Posts
         # NOTE Need to provide index name while bulk indexing
-        bulk(client=es, actions=(
+        bulk(client=es, actions=[
             post.indexing() for post in BlogPost.objects.filter(blog=blog).iterator()
-        ))
+        ])
 
 
 def _print_results(result):
