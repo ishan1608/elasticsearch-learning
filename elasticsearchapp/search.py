@@ -21,11 +21,10 @@ class BlogPostIndex(DocType):
 
 
 def bulk_indexing():
-    for blog in Blog.objects.all():
-        # NOTE Index name comes from the object 'Meta' itself
-        bulk(client=es, actions=[
-            post.indexing() for post in BlogPost.objects.filter(blog=blog).iterator()
-        ])
+    # NOTE Index name comes from the object 'Meta' itself
+    bulk(client=es, actions=[
+        post.indexing() for post in BlogPost.objects.all().iterator()
+    ])
 
 
 def _print_results(result):
