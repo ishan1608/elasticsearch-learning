@@ -11,7 +11,7 @@ class Blog(models.Model):
     name = models.CharField(max_length=32)
 
     def __str__(self):
-        return 'Blog: {}-{}'.format(self.subdomain, self.name).encode('utf-8')
+        return 'Blog: {}-{}'.format(self.subdomain, self.name)
 
 
 # Blogpost to be indexed based on blog into ElasticSearch
