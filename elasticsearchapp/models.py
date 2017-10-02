@@ -35,7 +35,8 @@ class BlogPost(models.Model):
             author=self.author.username,
             posted_date=self.posted_date,
             title=self.title,
-            text=self.text
+            text=self.text,
+            blog=self.blog.subdomain,
         )
         obj.save()
         return obj.to_dict(include_meta=True)

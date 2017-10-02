@@ -16,6 +16,7 @@ class BlogPostIndex(DocType):
     posted_date = Date()
     title = Text()
     text = Text()
+    blog = Text()
 
     class Meta:
         index = 'blogpost-index'
