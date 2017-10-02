@@ -32,7 +32,8 @@ class BlogPost(models.Model):
 
         obj = BlogPostIndex(
             meta={
-                'id': self.id
+                'id': self.id,
+                'index': 'blogpost-index-{}'.format(self.blog.subdomain)
             },
             author=self.author.username,
             posted_date=self.posted_date,
