@@ -54,13 +54,16 @@ def bulk_indexing():
 
 def _print_results(result):
     for hit in result:
-        # print hit.blog, hit.meta.doc_type, hit.meta.highlight, hit.title
-        print hit.blog, hit.meta.doc_type, hit.title
+        print hit.blog, hit.meta.doc_type, hit.meta.highlight, hit.title
 
 
 def _search(search_client, search_term):
-    # search_client = search_client.highlight('text')
+    search_client = search_client.highlight('*', require_field_match=False)
     search_client = search_client.query('match', _all=search_term)
+    # Logging curated search
+    # print "#############################################################"
+    # print search_client.to_dict()
+    # print "#############################################################"
     return search_client.execute()
 
 
