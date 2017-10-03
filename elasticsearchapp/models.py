@@ -11,6 +11,9 @@ class Blog(models.Model):
     subdomain = models.CharField(max_length=16)
     name = models.CharField(max_length=32)
 
+    def index_name(self):
+        return 'blog-index-{}'.format(self.subdomain)
+
     def __str__(self):
         return 'Blog: {}-{}'.format(self.subdomain, self.name).encode('utf-8')
 
@@ -33,7 +36,7 @@ class BlogPost(models.Model):
         obj = BlogPostIndex(
             meta={
                 'id': self.id,
-                'index': 'blogpost-index-{}'.format(self.blog.subdomain)
+                'index': self.blog.index_name()
             },
             author=self.author.username,
             posted_date=self.posted_date,
@@ -51,3 +54,34 @@ class BlogPost(models.Model):
 
 
 models.signals.post_save.connect(BlogPost.post_save, sender=BlogPost)
+
+
+class BlogPage(models.Model):
+    blog = models.ForeignKey(Blog)
+    title = models.CharField(max_length=200)
+    text = models.TextField(max_length=10240)
+
+    def __str__(self):
+        return 'Page: {}'.format(self.title).encode('utf-8')
+
+    def indexing(self):
+        from .search import BlogPageIndex
+
+        obj = BlogPageIndex(
+            meta={
+                'id': self.id,
+                'index': self.blog.index_name()
+            },
+            title=self.title,
+            text=self.text,
+            blog=self.blog.subdomain,
+        )
+        obj.save()
+        return obj.to_dict(include_meta=True)
+
+    @classmethod
+    def post_save(cls, sender, instance, **kwargs):
+        instance.indexing()
+
+
+models.signals.post_save.connect(BlogPage.post_save, sender=BlogPage)
