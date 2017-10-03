@@ -52,8 +52,15 @@ class BlogPost(models.Model):
     def post_save(cls, sender, instance, **kwargs):
         instance.indexing()
 
+    @classmethod
+    def post_delete(cls, sender, instance, **kwargs):
+        from .search import BlogPostIndex
+
+        BlogPostIndex.trigger_delete(instance)
+
 
 models.signals.post_save.connect(BlogPost.post_save, sender=BlogPost)
+models.signals.post_delete.connect(BlogPost.post_delete, sender=BlogPost)
 
 
 class BlogPage(models.Model):
@@ -83,5 +90,12 @@ class BlogPage(models.Model):
     def post_save(cls, sender, instance, **kwargs):
         instance.indexing()
 
+    @classmethod
+    def post_delete(cls, sender, instance, **kwargs):
+        from .search import BlogPageIndex
+
+        BlogPageIndex.trigger_delete(instance)
+
 
 models.signals.post_save.connect(BlogPage.post_save, sender=BlogPage)
+models.signals.post_delete.connect(BlogPage.post_delete, sender=BlogPage)

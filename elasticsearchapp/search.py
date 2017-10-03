@@ -19,11 +19,27 @@ class BlogPostIndex(DocType):
     blog = Text()
     metadata = Object()
 
+    @classmethod
+    def trigger_delete(cls, instance):
+        """
+        Delete the index from Elastic Search
+        :param instance: Object to be deleted
+        """
+        es.delete(instance.blog.index_name(), 'blog_post_index', instance.id)
+
 
 class BlogPageIndex(DocType):
     title = Text()
     text = Text()
     blog = Text()
+
+    @classmethod
+    def trigger_delete(cls, instance):
+        """
+        Delete the index from Elastic Search
+        :param instance: Object to be deleted
+        """
+        es.delete(instance.blog.index_name(), 'blog_page_index', instance.id)
 
 
 def bulk_indexing():
