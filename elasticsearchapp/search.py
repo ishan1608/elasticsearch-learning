@@ -4,7 +4,7 @@ from elasticsearch_dsl.connections import connections
 
 from .models import Blog, BlogPost, BlogPage
 
-es = connections.create_connection(
+es_client = connections.create_connection(
     hosts=['localhost'],
     http_auth=('elastic', 'changeme'),
     port=9200
@@ -25,7 +25,7 @@ class BlogPostIndex(DocType):
         Delete the index from Elastic Search
         :param instance: Object to be deleted
         """
-        es.delete(instance.blog.index_name(), 'blog_post_index', instance.id)
+        es_client.delete(instance.blog.index_name(), 'blog_post_index', instance.id)
 
 
 class BlogPageIndex(DocType):
@@ -39,15 +39,15 @@ class BlogPageIndex(DocType):
         Delete the index from Elastic Search
         :param instance: Object to be deleted
         """
-        es.delete(instance.blog.index_name(), 'blog_page_index', instance.id)
+        es_client.delete(instance.blog.index_name(), 'blog_page_index', instance.id)
 
 
 def bulk_indexing():
     # NOTE Index name comes from the object 'Meta' itself
-    bulk(client=es, actions=[
+    bulk(client=es_client, actions=[
         post.indexing() for post in BlogPost.objects.all().iterator()
     ])
-    bulk(client=es, actions=[
+    bulk(client=es_client, actions=[
         page.indexing() for page in BlogPage.objects.all().iterator()
     ])
 
